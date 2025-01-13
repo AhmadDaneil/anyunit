@@ -25,46 +25,62 @@ class ConversionPage extends StatefulWidget {
 
 class _ConversionPageState extends State<ConversionPage> {
   final TextEditingController _inputController = TextEditingController();
-  String _selectedConversion = 'Length';
+  String _selectedCategory = 'Length';
+  String _selectedUnitFrom = 'Meters';
+  String _selectedUnitTo = 'Feet';
   String _result = '';
 
-  final Map<String, String> conversionTypes = {
-    'Length': 'Meters to Feet / Feet to Meters',
-    'Weight': 'Kilograms to Pounds / Pounds to Kilograms',
+  final Map<String, List<String>> unitCategories = {
+    'Length': ['Meters', 'Feet', 'Kilometers', 'Miles'],
+    'Weight': ['Kilograms', 'Pounds', 'Grams', 'Ounces'],
+    'Volume': ['Liters', 'Gallons', 'Milliliters', 'Cups'],
   };
 
   void _convert() {
     double input = double.tryParse(_inputController.text) ?? 0;
-    double convertedValue;
+    double convertedValue = 0;
 
-    switch (_selectedConversion) {
-      case 'Length':
-        if (_result.isEmpty || _result.contains('Feet')) {
-          convertedValue = input * 3.28084; // Meters to Feet
-          setState(() {
-            _result = '${input.toStringAsFixed(2)} Meters = ${convertedValue.toStringAsFixed(2)} Feet';
-          });
-        } else {
-          convertedValue = input / 3.28084; // Feet to Meters
-          setState(() {
-            _result = '${input.toStringAsFixed(2)} Feet = ${convertedValue.toStringAsFixed(2)} Meters';
-          });
-        }
-        break;
-      case 'Weight':
-        if (_result.isEmpty || _result.contains('Pounds')) {
-          convertedValue = input * 2.20462; // Kilograms to Pounds
-          setState(() {
-            _result = '${input.toStringAsFixed(2)} Kilograms = ${convertedValue.toStringAsFixed(2)} Pounds';
-          });
-        } else {
-          convertedValue = input / 2.20462; // Pounds to Kilograms
-          setState(() {
-            _result = '${input.toStringAsFixed(2)} Pounds = ${convertedValue.toStringAsFixed(2)} Kilograms';
-          });
-        }
-        break;
+    if (_selectedCategory == 'Length') {
+      if (_selectedUnitFrom == 'Meters' && _selectedUnitTo == 'Feet') {
+        convertedValue = input * 3.28084;
+      } else if (_selectedUnitFrom == 'Feet' && _selectedUnitTo == 'Meters') {
+        convertedValue = input / 3.28084;
+      } else if (_selectedUnitFrom == 'Kilometers' && _selectedUnitTo == 'Miles') {
+        convertedValue = input * 0.621371;
+      } else if (_selectedUnitFrom == 'Miles' && _selectedUnitTo == 'Kilometers') {
+        convertedValue = input / 0.621371;
+      } else {
+        convertedValue = input; // Same units, no conversion
+      }
+    } else if (_selectedCategory == 'Weight') {
+      if (_selectedUnitFrom == 'Kilograms' && _selectedUnitTo == 'Pounds') {
+        convertedValue = input * 2.20462;
+      } else if (_selectedUnitFrom == 'Pounds' && _selectedUnitTo == 'Kilograms') {
+        convertedValue = input / 2.20462;
+      } else if (_selectedUnitFrom == 'Grams' && _selectedUnitTo == 'Ounces') {
+        convertedValue = input * 0.035274;
+      } else if (_selectedUnitFrom == 'Ounces' && _selectedUnitTo == 'Grams') {
+        convertedValue = input / 0.035274;
+      } else {
+        convertedValue = input;
+      }
+    } else if (_selectedCategory == 'Volume') {
+      if (_selectedUnitFrom == 'Liters' && _selectedUnitTo == 'Gallons') {
+        convertedValue = input * 0.264172;
+      } else if (_selectedUnitFrom == 'Gallons' && _selectedUnitTo == 'Liters') {
+        convertedValue = input / 0.264172;
+      } else if (_selectedUnitFrom == 'Milliliters' && _selectedUnitTo == 'Cups') {
+        convertedValue = input * 0.00422675;
+      } else if (_selectedUnitFrom == 'Cups' && _selectedUnitTo == 'Milliliters') {
+        convertedValue = input / 0.00422675;
+      } else {
+        convertedValue = input;
+      }
     }
+
+    setState(() {
+      _result = '${input.toStringAsFixed(2)} $_selectedUnitFrom = ${convertedValue.toStringAsFixed(2)} $_selectedUnitTo';
+    });
   }
 
   @override
@@ -78,14 +94,46 @@ class _ConversionPageState extends State<ConversionPage> {
         child: Column(
           children: [
             DropdownButton<String>(
-              value: _selectedConversion,
+              value: _selectedCategory,
               onChanged: (String? newValue) {
                 setState(() {
-                  _selectedConversion = newValue!;
+                  _selectedCategory = newValue!;
+                  _selectedUnitFrom = unitCategories[_selectedCategory]![0];
+                  _selectedUnitTo = unitCategories[_selectedCategory]![1];
                   _result = '';
                 });
               },
-              items: conversionTypes.keys
+              items: unitCategories.keys
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            DropdownButton<String>(
+              value: _selectedUnitFrom,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedUnitFrom = newValue!;
+                });
+              },
+              items: unitCategories[_selectedCategory]!
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            DropdownButton<String>(
+              value: _selectedUnitTo,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedUnitTo = newValue!;
+                });
+              },
+              items: unitCategories[_selectedCategory]!
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
