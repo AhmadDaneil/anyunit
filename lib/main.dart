@@ -29,6 +29,7 @@ class _ConversionPageState extends State<ConversionPage> {
   String _selectedUnitFrom = 'Meters';
   String _selectedUnitTo = 'Feet';
   String _result = '';
+  MaterialColor _themeColor = Colors.blue;
 
   final Map<String, List<String>> unitCategories = {
     'Length': ['Meters', 'Feet', 'Kilometers', 'Miles'],
@@ -50,7 +51,7 @@ class _ConversionPageState extends State<ConversionPage> {
       } else if (_selectedUnitFrom == 'Miles' && _selectedUnitTo == 'Kilometers') {
         convertedValue = input / 0.621371;
       } else {
-        convertedValue = input; // Same units, no conversion
+        convertedValue = input;
       }
     } else if (_selectedCategory == 'Weight') {
       if (_selectedUnitFrom == 'Kilograms' && _selectedUnitTo == 'Pounds') {
@@ -88,6 +89,14 @@ class _ConversionPageState extends State<ConversionPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Unit Converter'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.color_lens),
+            onPressed: () {
+              _showThemeDialog();
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -161,6 +170,37 @@ class _ConversionPageState extends State<ConversionPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showThemeDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Choose Theme Color'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: Colors.primaries.map((color) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _themeColor = color;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    color: color,
+                    height: 50,
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
     );
   }
 }
