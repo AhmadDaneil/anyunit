@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'calculator_widget.dart';
 
 class UnitConversionApp extends StatefulWidget {
   const UnitConversionApp({super.key});
@@ -142,76 +143,6 @@ class _ConversionPageState extends State<ConversionPage> {
     });
   }
 
-  Widget _buildCalculator() {
-    TextEditingController num1Controller = TextEditingController();
-    TextEditingController num2Controller = TextEditingController();
-    String result = '';
-
-    void calculate(String operation) {
-      double num1 = double.tryParse(num1Controller.text) ?? 0;
-      double num2 = double.tryParse(num2Controller.text) ?? 0;
-      double calcResult = 0;
-
-      switch (operation) {
-        case '+':
-          calcResult = num1 + num2;
-          break;
-        case '-':
-          calcResult = num1 - num2;
-          break;
-        case '*':
-          calcResult = num1 * num2;
-          break;
-        case '/':
-          calcResult = num2 != 0 ? num1 / num2 : 0;
-          break;
-      }
-
-      setState(() {
-        result = calcResult.toStringAsFixed(2);
-      });
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextField(
-          controller: num1Controller,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Number 1'),
-        ),
-        TextField(
-          controller: num2Controller,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Number 2'),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(onPressed: () => calculate('+'), child: const Text('+')),
-            ElevatedButton(onPressed: () => calculate('-'), child: const Text('-')),
-            ElevatedButton(onPressed: () => calculate('*'), child: const Text('*')),
-            ElevatedButton(onPressed: () => calculate('/'), child: const Text('/')),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Text(
-            'Result: $result',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ],
-    );
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -246,12 +177,11 @@ class _ConversionPageState extends State<ConversionPage> {
                 );
               }).toList(),
             ),
-            if (_showCalculator) _buildCalculator(),
             ElevatedButton(
               onPressed: _toggleCalculator,
               child: Text(_showCalculator ? 'Hide Calculator' : 'Show Calculator'),
             ),
-            const SizedBox(height: 10),
+            if (_showCalculator) const CalculatorWidget(),
             Expanded(
               child: ListView.builder(
                 itemCount: _conversions.length,
