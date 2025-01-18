@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'conversion_page.dart'; // Import the ConversionPage class
+import 'calculator_widget.dart';
+
 
 class UnitConversionApp extends StatefulWidget {
   const UnitConversionApp({super.key});
@@ -20,30 +21,262 @@ class _UnitConversionAppState extends State<UnitConversionApp> {
         primarySwatch: _themeColor,
         scaffoldBackgroundColor: _themeColor.shade100,
         textTheme: TextTheme(
-          bodyLarge: TextStyle(
-            fontSize: 18,
-            color: _themeColor.shade900,
-            fontFamily: 'Roboto',
-          ),
-          bodyMedium: TextStyle(
-            fontSize: 16,
-            color: _themeColor.shade900,
-            fontFamily: 'Roboto',
-          ),
-          titleLarge: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: _themeColor.shade900,
-            fontFamily: 'Roboto',
-          ),
+          bodyLarge: TextStyle(color: _themeColor.shade900),
+          bodyMedium: TextStyle(color: _themeColor.shade900),
         ),
       ),
-      home: ConversionPage(
-        onThemeChanged: (color) {
-          setState(() {
-            _themeColor = color;
-          });
-        },
+      home: ConversionPage(onThemeChanged: (color) {
+        setState(() {
+          _themeColor = color;
+        });
+      }),
+    );
+  }
+}
+
+class ConversionPage extends StatefulWidget {
+  final ValueChanged<MaterialColor> onThemeChanged;
+
+  const ConversionPage({super.key, required this.onThemeChanged});
+
+  @override
+  _ConversionPageState createState() => _ConversionPageState();
+}
+
+class _ConversionPageState extends State<ConversionPage> {
+  final List<Map<String, dynamic>> _conversions = [
+    {'input': TextEditingController(), 'unitFrom': 'Meters', 'unitTo': 'Feet', 'result': ''}
+  ];
+
+  final Map<String, List<String>> unitCategories = {
+    'Length': ['Meters', 'Feet', 'Kilometers', 'Miles'],
+    'Weight': ['Kilograms', 'Pounds', 'Grams', 'Ounces'],
+    'Volume': ['Liters', 'Gallons', 'Milliliters', 'Cups'],
+    'Temperature': ['Celsius', 'Fahrenheit', 'Kelvin'],
+    'Speed': ['Meters/Second', 'Kilometers/Hour', 'Miles/Hour'],
+  };
+
+  String _selectedCategory = 'Length';
+  bool _showCalculator = false;
+
+  void _convertAll() {
+    for (var conversion in _conversions) {
+      double input = double.tryParse(conversion['input'].text) ?? 0;
+      double result = _performConversion(input, conversion['unitFrom'], conversion['unitTo']);
+
+      setState(() {
+        conversion['result'] =
+            '${input.toStringAsFixed(2)} ${conversion['unitFrom']} = ${result.toStringAsFixed(2)} ${conversion['unitTo']}';
+      });
+    }
+  }
+
+  double _performConversion(double input, String unitFrom, String unitTo) {
+    if (_selectedCategory == 'Length') {
+      if (unitFrom == 'Meters' && unitTo == 'Feet') return input * 3.28084;
+      if (unitFrom == 'Feet' && unitTo == 'Meters') return input / 3.28084;
+      if (unitFrom == 'Kilometers' && unitTo == 'Miles') return input * 0.621371;
+      if (unitFrom == 'Miles' && unitTo == 'Kilometers') return input / 0.621371;
+    } else if (_selectedCategory == 'Weight') {
+      if (unitFrom == 'Kilograms' && unitTo == 'Pounds') return input * 2.20462;
+      if (unitFrom == 'Pounds' && unitTo == 'Kilograms') return input / 2.20462;
+    } else if (_selectedCategory == 'Volume') {
+      if (unitFrom == 'Liters' && unitTo == 'Gallons') return input * 0.264172;
+      if (unitFrom == 'Gallons' && unitTo == 'Liters') return input / 0.264172;
+    } else if (_selectedCategory == 'Temperature') {
+      if (unitFrom == 'Celsius' && unitTo == 'Fahrenheit') return input * 9 / 5 + 32;
+      if (unitFrom == 'Fahrenheit' && unitTo == 'Celsius') return (input - 32) * 5 / 9;
+      if (unitFrom == 'Celsius' && unitTo == 'Kelvin') return input + 273.15;
+      if (unitFrom == 'Kelvin' && unitTo == 'Celsius') return input - 273.15;
+    }
+    return input;
+  }
+
+  void _addConversionField() {
+    setState(() {
+      _conversions.add({
+        'input': TextEditingController(),
+        'unitFrom': unitCategories[_selectedCategory]![0],
+        'unitTo': unitCategories[_selectedCategory]![1],
+        'result': ''
+      });
+    });
+  }
+
+  void _removeConversionField(int index) {
+    setState(() {
+      _conversions.removeAt(index);
+    });
+  }
+
+  void _showThemeDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Choose Theme Color'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: Colors.primaries.map((color) {
+                return GestureDetector(
+                  onTap: () {
+                    widget.onThemeChanged(color);
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    color: color,
+                    height: 50,
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _toggleCalculator() {
+    setState(() {
+      _showCalculator = !_showCalculator;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Unit Converter'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.color_lens),
+            onPressed: _showThemeDialog,
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: const Text('Unit Categories'),
+              children: unitCategories.keys.map((category) {
+                return ListTile(
+                  title: Text(category),
+                  onTap: () {
+                    setState(() {
+                      _selectedCategory = category;
+                      for (var conversion in _conversions) {
+                        conversion['unitFrom'] = unitCategories[category]![0];
+                        conversion['unitTo'] = unitCategories[category]![1];
+                        conversion['result'] = '';
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+            ElevatedButton(
+              onPressed: _toggleCalculator,
+              child: Text(_showCalculator ? 'Hide Calculator' : 'Show Calculator'),
+            ),
+            if (_showCalculator) const CalculatorWidget(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _conversions.length,
+                itemBuilder: (context, index) {
+                  final conversion = _conversions[index];
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: conversion['input'],
+                                  keyboardType: TextInputType.number,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Enter value',
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () => _removeConversionField(index),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: DropdownButton<String>(
+                                  value: conversion['unitFrom'],
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      conversion['unitFrom'] = newValue!;
+                                    });
+                                  },
+                                  items: unitCategories[_selectedCategory]!
+                                      .map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.arrow_forward),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: DropdownButton<String>(
+                                  value: conversion['unitTo'],
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      conversion['unitTo'] = newValue!;
+                                    });
+                                  },
+                                  items: unitCategories[_selectedCategory]!
+                                      .map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            conversion['result'],
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            ElevatedButton(
+              onPressed: _addConversionField,
+              child: const Text('Add Conversion'),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _convertAll,
+              child: const Text('Convert All'),
+            ),
+          ],
+        ),
       ),
     );
   }

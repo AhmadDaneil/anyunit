@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'calculator_widget.dart';
 
 class ConversionPage extends StatefulWidget {
   final ValueChanged<MaterialColor> onThemeChanged;
@@ -11,10 +10,18 @@ class ConversionPage extends StatefulWidget {
 }
 
 class _ConversionPageState extends State<ConversionPage> {
-  // Your existing ConversionPage logic goes here...
+  String _inputValue = '';
+  double _conversionResult = 0.0;
+
+  void _convert() {
+    setState(() {
+      // Example conversion logic (e.g., from meters to kilometers)
+      _conversionResult = double.tryParse(_inputValue) ?? 0.0 / 1000;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Your ConversionPage UI implementation here...
     return Scaffold(
       appBar: AppBar(
         title: const Text('Unit Converter'),
@@ -22,12 +29,31 @@ class _ConversionPageState extends State<ConversionPage> {
           IconButton(
             icon: const Icon(Icons.color_lens),
             onPressed: () {
-              // Logic to change the theme color
+              widget.onThemeChanged(Colors.blue); // Example theme change
             },
           ),
         ],
       ),
-      body: const Center(child: Text('Conversion Page Content')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Enter value'),
+              onChanged: (value) {
+                setState(() {
+                  _inputValue = value;
+                });
+              },
+            ),
+            ElevatedButton(
+              onPressed: _convert,
+              child: const Text('Convert'),
+            ),
+            Text('Result: $_conversionResult'),
+          ],
+        ),
+      ),
     );
   }
 }

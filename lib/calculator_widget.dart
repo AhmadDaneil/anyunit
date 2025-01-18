@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CalculatorWidget extends StatefulWidget {
-  const CalculatorWidget({Key? key}) : super(key: key);
+  const CalculatorWidget({super.key});
 
   @override
   _CalculatorWidgetState createState() => _CalculatorWidgetState();
