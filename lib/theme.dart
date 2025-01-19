@@ -15,7 +15,7 @@ class ThemeChanger extends StatelessWidget {
         return AlertDialog(
           title: const Text('Pick a Color'),
           content: SingleChildScrollView(
-            child: BlockPicker(
+            child: ColorPicker(
               pickerColor: pickerColor,
               onColorChanged: (Color color) {
                 pickerColor = color; // Update selected color

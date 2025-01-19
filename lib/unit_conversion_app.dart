@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'calculator_widget.dart';
 
-
 class UnitConversionApp extends StatefulWidget {
   const UnitConversionApp({super.key});
 
@@ -25,11 +24,13 @@ class _UnitConversionAppState extends State<UnitConversionApp> {
           bodyMedium: TextStyle(color: _themeColor.shade900),
         ),
       ),
-      home: ConversionPage(onThemeChanged: (color) {
-        setState(() {
-          _themeColor = color;
-        });
-      }),
+      home: ConversionPage(
+        onThemeChanged: (color) {
+          setState(() {
+            _themeColor = color;
+          });
+        },
+      ),
     );
   }
 }
@@ -144,6 +145,15 @@ class _ConversionPageState extends State<ConversionPage> {
     });
   }
 
+  void _resetConversions() {
+    setState(() {
+      for (var conversion in _conversions) {
+        conversion['input'].clear();
+        conversion['result'] = '';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,10 +171,19 @@ class _ConversionPageState extends State<ConversionPage> {
         child: Column(
           children: [
             ExpansionTile(
-              title: const Text('Unit Categories'),
+              title: Text(
+                'Category: $_selectedCategory',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
               children: unitCategories.keys.map((category) {
                 return ListTile(
                   title: Text(category),
+                  tileColor: category == _selectedCategory
+                      ? Theme.of(context).primaryColorLight
+                      : null,
                   onTap: () {
                     setState(() {
                       _selectedCategory = category;
@@ -274,6 +293,11 @@ class _ConversionPageState extends State<ConversionPage> {
             ElevatedButton(
               onPressed: _convertAll,
               child: const Text('Convert All'),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _resetConversions,
+              child: const Text('Reset All'),
             ),
           ],
         ),
