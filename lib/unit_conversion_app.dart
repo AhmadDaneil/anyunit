@@ -50,11 +50,11 @@ class _ConversionPageState extends State<ConversionPage> {
   ];
 
   final Map<String, List<String>> unitCategories = {
-    'Length': ['Meters', 'Feet', 'Kilometers', 'Miles'],
-    'Weight': ['Kilograms', 'Pounds', 'Grams', 'Ounces'],
-    'Volume': ['Liters', 'Gallons', 'Milliliters', 'Cups'],
+    'Length': ['Meters', 'Feet', 'Kilometers', 'Miles', 'Yards', 'Inches'],
+    'Weight': ['Kilograms', 'Pounds', 'Grams', 'Ounces', 'Micrograms', 'Milligrams'],
+    'Volume': ['Liters', 'Gallons', 'Milliliters', 'Cups', 'Cubic Meters', 'Cubic Feet'],
     'Temperature': ['Celsius', 'Fahrenheit', 'Kelvin'],
-    'Speed': ['Meters/Second', 'Kilometers/Hour', 'Miles/Hour'],
+    'Speed': ['Meters/Second', 'Kilometers/Hour', 'Miles/Hour', 'Kilometers/Second', 'Feet/Hour'],
   };
 
   String _selectedCategory = 'Length';
@@ -78,17 +78,28 @@ class _ConversionPageState extends State<ConversionPage> {
       if (unitFrom == 'Feet' && unitTo == 'Meters') return input / 3.28084;
       if (unitFrom == 'Kilometers' && unitTo == 'Miles') return input * 0.621371;
       if (unitFrom == 'Miles' && unitTo == 'Kilometers') return input / 0.621371;
+      if (unitFrom == 'Yards' && unitTo == 'Inches') return input * 36;
+      if (unitFrom == 'Inches' && unitTo == 'Yards') return input / 36;
     } else if (_selectedCategory == 'Weight') {
       if (unitFrom == 'Kilograms' && unitTo == 'Pounds') return input * 2.20462;
       if (unitFrom == 'Pounds' && unitTo == 'Kilograms') return input / 2.20462;
+      if (unitFrom == 'Micrograms' && unitTo == 'Milligrams') return input / 1000;
+      if (unitFrom == 'Milligrams' && unitTo == 'Micrograms') return input * 1000;
     } else if (_selectedCategory == 'Volume') {
       if (unitFrom == 'Liters' && unitTo == 'Gallons') return input * 0.264172;
       if (unitFrom == 'Gallons' && unitTo == 'Liters') return input / 0.264172;
+      if (unitFrom == 'Cubic Meters' && unitTo == 'Cubic Feet') return input * 35.3147;
+      if (unitFrom == 'Cubic Feet' && unitTo == 'Cubic Meters') return input / 35.3147;
     } else if (_selectedCategory == 'Temperature') {
       if (unitFrom == 'Celsius' && unitTo == 'Fahrenheit') return input * 9 / 5 + 32;
       if (unitFrom == 'Fahrenheit' && unitTo == 'Celsius') return (input - 32) * 5 / 9;
       if (unitFrom == 'Celsius' && unitTo == 'Kelvin') return input + 273.15;
       if (unitFrom == 'Kelvin' && unitTo == 'Celsius') return input - 273.15;
+    } else if (_selectedCategory == 'Speed') {
+      if (unitFrom == 'Meters/Second' && unitTo == 'Kilometers/Second') return input / 1000;
+      if (unitFrom == 'Kilometers/Second' && unitTo == 'Meters/Second') return input * 1000;
+      if (unitFrom == 'Feet/Hour' && unitTo == 'Meters/Second') return input * 0.000084667;
+      if (unitFrom == 'Meters/Second' && unitTo == 'Feet/Hour') return input / 0.000084667;
     }
     return input;
   }
@@ -301,7 +312,7 @@ class _ConversionPageState extends State<ConversionPage> {
             ),
           ],
         ),
-      ),
-    );
-  }
+      ),
+    );
+  }
 }
