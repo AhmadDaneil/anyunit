@@ -64,8 +64,8 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
           children: [
             ElevatedButton(onPressed: () => calculate('+'), child: const Text('+')),
             ElevatedButton(onPressed: () => calculate('-'), child: const Text('-')),
-            ElevatedButton(onPressed: () => calculate('*'), child: const Text('*')),
-            ElevatedButton(onPressed: () => calculate('/'), child: const Text('/')),
+            ElevatedButton(onPressed: () => calculate('*'), child: const Text('×')),
+            ElevatedButton(onPressed: () => calculate('/'), child: const Text('÷')),
           ],
         ),
         const SizedBox(height: 10),
