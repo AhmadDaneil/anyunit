@@ -1,0 +1,77 @@
+[33mcommit c1f7d487a42c6b592e5b2c39bc794d63a6b245d1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Ahmad daneil Bin Wari <2023837334@student.uitm.edu.my>
+Date:   Fri Jan 24 19:48:57 2025 +0800
+
+    Updating readme
+
+[33mcommit bd4182e2388625573a28cb71bce1cc6534ec8493[m
+Author: Ahmad daneil Bin Wari <2023837334@student.uitm.edu.my>
+Date:   Tue Jan 21 18:01:41 2025 +0800
+
+    A little fix
+
+[33mcommit 55244bb498663453e1042481d03225d53a7db3f5[m
+Author: wedanya <you@example.com>
+Date:   Tue Jan 21 17:44:57 2025 +0800
+
+    Making the full function convertion
+
+[33mcommit a391408d90350658aaf33940b3deb58465275a91[m
+Author: wedanya <you@example.com>
+Date:   Tue Jan 21 01:36:14 2025 +0800
+
+    Adding unit: Length: Add yard, Inch , Microgram and Miligram, Cubic meter, cubic foot, Kilometer/Second and Foot/hour
+
+[33mcommit cb361582542e8b12959377da502490f72755c579[m
+Author: anep3080 <hanifahmadamirul@gmail.com>
+Date:   Tue Jan 21 00:50:24 2025 +0800
+
+    change the mathematical operator icon
+
+[33mcommit 4e7ccbf4ae0238740892450513088db7227c7b00[m
+Author: aishah-sha <n.aishahbahar@gmail.com>
+Date:   Sun Jan 19 13:36:23 2025 +0800
+
+    Adding "Reset all" button
+
+[33mcommit 0a80a7c2ffd325aa2c15f3f344860a4269144ad1[m
+Author: Ahmad daneil Bin Wari <2023837334@student.uitm.edu.my>
+Date:   Sat Jan 18 19:08:47 2025 +0800
+
+    There is an error when adding  conversion page, so we fix it.
+
+[33mcommit 06444b8c4f0f00b41b253cb24c5f138806b65f5a[m
+Author: aishah-sha <n.aishahbahar@gmail.com>
+Date:   Tue Jan 14 19:46:46 2025 +0800
+
+    Add conversion page
+
+[33mcommit 8517c239f7b0520c191ab2ea368812d392056eff[m
+Author: anep3080 <hanifahmadamirul@gmail.com>
+Date:   Tue Jan 14 18:09:12 2025 +0800
+
+    calc widget fixed, added new file
+
+[33mcommit 5b38e912e3263e3799a59a4f2eb6ce654354c3fb[m
+Author: Ahmad daneil Bin Wari <2023837334@student.uitm.edu.my>
+Date:   Tue Jan 14 00:36:56 2025 +0800
+
+    Add 2 files to make it easier to change the theme and conversion unit
+
+[33mcommit e82ffce1c09b4665242bf95a8ff3d94f4c8fc8d3[m
+Author: Ahmad daneil Bin Wari <2023837334@student.uitm.edu.my>
+Date:   Mon Jan 13 23:43:25 2025 +0800
+
+    Adding themes and widget
+
+[33mcommit 4ddc43d08f755186895146dfa5b78488896f52a2[m
+Author: Ahmad daneil Bin Wari <2023837334@student.uitm.edu.my>
+Date:   Mon Jan 13 23:41:36 2025 +0800
+
+    Fixed error about convertedValue
+
+[33mcommit f5712df79eff5095977ba9c842ccd4f8ee6c225b[m
+Author: Ahmad daneil Bin Wari <2023837334@student.uitm.edu.my>
+Date:   Mon Jan 13 23:32:18 2025 +0800
+
+    Base of the project
